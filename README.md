@@ -72,13 +72,13 @@ call dein#add('iranoan/asyncomplete-mail')
 ## Vim packadd
 
 ``` sh
-$ git clone https://github.com/iranoan/asyncomplete-mail \~/.vim/pack/iranoan/start/asyncomplete-mail
+$ git clone https://github.com/iranoan/asyncomplete-mail ~/.vim/pack/iranoan/start/asyncomplete-mail
 ```
 
 遅延読み込みをさせるなら
 
 ``` sh
-$ git clone https://github.com/iranoan/asyncomplete-mail \~/.vim/pack/iranoan/opt/asyncomplete-mail
+$ git clone https://github.com/iranoan/asyncomplete-mail ~/.vim/pack/iranoan/opt/asyncomplete-mail
 ```
 
 \~/.vim/vimrc などの設定ファイルに次のような記載を加える
