@@ -37,8 +37,9 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 		let l:kw = matchstr(matchstr(l:typed, '\c^Fcc:\s*\zs[^ ]\+'), '[^ ]\+$')
 		let l:matches = map(py3eval('get_mail_folders()'), '{"word":v:val,"dup":0,"icase":1,"menu": "[Fcc]"}')
 	elseif l:sync_name ==# 'mailHeaderAddress'
-		let l:kw = matchstr(matchstr(l:typed, '^[^:]\+:\s*\zs[^ ]\+'), '[^ ]\+$')
+		let l:kw = matchstr(matchstr(l:typed, '^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
 		" アドレス補完だけは速度的な理由で Python 使用
+
 		let l:matches = py3eval('asyncomplete_address(''' . substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') . ''')')
 	else
 		return
