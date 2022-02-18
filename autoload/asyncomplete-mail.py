@@ -35,7 +35,7 @@ def asyncomplete_address(kw):
                                     'dup': 0, 'icase': 1, 'menu': '[goobook]'})
         return matches
 
-    if which('agoobook') is not None:
+    if which('goobook') is not None:
         return goobook(kw)
     elif which('notmuch'):
         ret = run(['notmuch', 'address', '--deduplicate=address',
