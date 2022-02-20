@@ -9,8 +9,17 @@ License: GPL Ver.3.
                                                     *asyncomplete-mail-contents*
 目次~
 
+	* 概要                                        |asyncomplete-mail-introduction|
+	* 要件                                        |asyncomplete-mail-require|
+	* あれば便利になるツール                      |asyncomplete-mail-add|
+		- インストール                              |asyncomplete-mail-install|
+	* 設定                                        |asyncomplete-mail-conf|
+	* 使用方法                                    |asyncomplete-mail-use|
+	* TODO                                        |asyncomplete-mail-todo|
+
+
 ==============================================================================
-                                                   *notmuch-python-introduction*
+                                                *asyncomplete-mail-introduction*
 概要~
 
 notmuch-py-vim (https://github.com/iranoan/notmuch-py-vim) の下書きメールの
@@ -74,10 +83,19 @@ dein.nvim (https://github.com/Shougo/dein.vim)~
 Vim packadd~
 >
 	$ git clone https://github.com/iranoan/asyncomplete-mail ~/.vim/pack/iranoan/start/asyncomplete-mail
+
 <	遅延読み込みをさせるなら >
 	$ git clone https://github.com/iranoan/asyncomplete-mail ~/.vim/pack/iranoan/opt/asyncomplete-mail
-<	~/.vim/vimrc などの設定ファイルに次のような記載を加える >
+<	として asyncomplete.vim の設定箇所に >
+	packadd asyncomplete-mail
+<	を書き加える
 
+
+==============================================================================
+                                                        *asyncomplete-mail-conf*
+設定~
+~/.vim/vimrc などの設定ファイル中の asyncomplete.vim 設定箇所に次のような記載を
+加える >
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options({
 				\ 'allowlist': ['notmuch-draft'],
 				\ }))
