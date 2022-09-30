@@ -25,19 +25,19 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 	let l:col = a:ctx['col']
 	let l:sync_name = synIDattr(synID(a:ctx['lnum'], l:col - 1, 0), 'name')
 	if l:sync_name ==# 'mailHeaderEncrypt'
-		let l:kw = matchstr(l:typed, '[a-z/-]\+$')
+		let l:kw = matchstr(l:typed, '\m\c[a-z/-]\+$')
 		let l:matches = s:comp_kw(l:kw, ['Subject', 'Public-Key', 'PublicKey'])
 	elseif l:sync_name ==# 'mailHeaderSignature'
-		let l:kw = matchstr(l:typed, '[a-z/-]\+$')
+		let l:kw = matchstr(l:typed, '\m\c[a-z/-]\+$')
 		let l:matches = s:comp_kw(l:kw, [])
 	elseif l:sync_name ==# 'mailHeaderAttach'
-		let l:kw = matchstr(matchstr(l:typed, '\c^Attach:\s*\zs[^ ]\+'), '[^ ]\+$')
+		let l:kw = matchstr(matchstr(l:typed, '\m\c^Attach:\s*\zs[^ ]\+'), '[^ ]\+$')
 		let l:matches = s:file(l:kw)
 	elseif l:sync_name ==# 'mailHeaderFcc'
-		let l:kw = matchstr(matchstr(l:typed, '\c^Fcc:\s*\zs[^ ]\+'), '[^ ]\+$')
+		let l:kw = matchstr(matchstr(l:typed, '\m\c^Fcc:\s*\zs[^ ]\+'), '[^ ]\+$')
 		let l:matches = map(py3eval('get_mail_folders()'), '{"word":v:val,"dup":0,"icase":1,"menu": "[Fcc]"}')
 	elseif l:sync_name ==# 'mailHeaderAddress'
-		let l:kw = matchstr(matchstr(l:typed, '^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
+		let l:kw = matchstr(matchstr(l:typed, '\m^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
 		" アドレス補完だけは速度的な理由で Python 使用
 
 		let l:matches = py3eval('asyncomplete_address(''' . substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') . ''')')
