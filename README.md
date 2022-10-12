@@ -91,7 +91,7 @@ call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options({
 
 ## 使用方法
 
-上記のように 'allowlist': ['notmuch-draft'] が済んでいれば、メール・ヘッダー上
+上記のように `'allowlist': ['notmuch-draft']` が済んでいれば、メール・ヘッダー上
 でインサート・モードなら補完が始まる
 
 * From, To, Cc, Bcc 等ではメールアドレス
