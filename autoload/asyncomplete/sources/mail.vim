@@ -1,6 +1,7 @@
 " Author:  Iranoan <iranoan+vim@gmail.com>
 " License: GPL Ver.3.
 
+scriptversion 4
 scriptencoding utf-8
 
 if get(g:, 'loaded_autoload_asyncomplete_sources_mail')
@@ -9,7 +10,7 @@ endif
 let s:save_cpo = &cpoptions
 set cpoptions&vim
 
-execute 'py3file ' . expand('<sfile>:p:h:h:h') . '/asyncomplete-mail.py'
+execute 'py3file ' .. expand('<sfile>:p:h:h:h') .. '/asyncomplete-mail.py'
 
 function asyncomplete#sources#mail#get_source_options(opts)
 	return extend(extend({}, a:opts), {
@@ -39,8 +40,7 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 	elseif l:sync_name ==# 'mailHeaderAddress'
 		let l:kw = matchstr(matchstr(l:typed, '\m^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
 		" アドレス補完だけは速度的な理由で Python 使用
-
-		let l:matches = py3eval('asyncomplete_address(''' . substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') . ''')')
+		let l:matches = py3eval('asyncomplete_address(''' .. substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') .. ''')')
 	else
 		return
 	endif
@@ -52,7 +52,7 @@ endfunction
 function s:comp_kw(kw, comp_ls)
 	let l:matches = []
 	for l:s in ['S/MIME', 'S-MIME', 'SMIME', 'PGP/MIME', 'PGP-MIME', 'PGPMIME', 'PGP'] + a:comp_ls
-		if l:s =~# '\c' . a:kw
+		if l:s =~# '\c' .. a:kw
 			if l:s ==# 'S-MIME' || l:s ==# 'SMIME'
 				let l:s = 'S/MIME'
 			elseif l:s ==# 'PGP-MIME' || l:s ==# 'PGPMIME'
@@ -73,14 +73,14 @@ endfunction
 " https://github.com/prabirshrestha/asyncomplete-file.vim をほぼ写しただけ {{{
 function s:filename_map(prefix, file) abort
 	let l:abbr = fnamemodify(a:file, ':t')
-	let l:word = a:prefix . l:abbr
+	let l:word = a:prefix .. l:abbr
 	if l:word !~# '^\(/\|\~\)'
 		" 相対パスだとメール作成時と送信時でカレント・ディレクトリが異なると、別ファイル扱いになる
 		let l:word = fnamemodify(l:word, ':~')
 	endif
 	if isdirectory(a:file)
 		let l:menu = '[dir]'
-		let l:abbr = '/' . l:abbr
+		let l:abbr = l:abbr.. '/'
 	else
 		let l:menu = '[file]'
 		let l:abbr = l:abbr
@@ -110,11 +110,11 @@ function s:file(kw)
 	else
 		let l:cwd = a:kw
 	endif
-	let l:glob = fnamemodify(l:cwd, ':t') . '.\=[^.]*'
+	let l:glob = fnamemodify(l:cwd, ':t') .. '.\=[^.]*'
 	let l:cwd  = fnamemodify(l:cwd, ':p:h')
 	let l:pre  = fnamemodify(a:kw, ':h')
 	if l:pre !~# '/$'
-		let l:pre = l:pre . '/'
+		let l:pre = l:pre .. '/'
 	endif
 	let l:cwdlen   = strlen(l:cwd)
 	let l:files    = split(globpath(l:cwd, l:glob), '\n')
