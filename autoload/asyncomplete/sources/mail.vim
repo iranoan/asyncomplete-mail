@@ -70,14 +70,9 @@ function s:comp_kw(kw, comp_ls)
 	endif
 endfunction
 
-" https://github.com/prabirshrestha/asyncomplete-file.vim をほぼ写しただけ {{{
-function s:filename_map(prefix, file) abort
+function s:filename_map(prefix, file) abort " https://github.com/prabirshrestha/asyncomplete-file.vim を参考にした
 	let l:abbr = fnamemodify(a:file, ':t')
 	let l:word = a:prefix .. l:abbr
-	if l:word !~# '^\(/\|\~\)'
-		" 相対パスだとメール作成時と送信時でカレント・ディレクトリが異なると、別ファイル扱いになる
-		let l:word = fnamemodify(l:word, ':~')
-	endif
 	if isdirectory(a:file)
 		let l:menu = '[dir]'
 		let l:abbr = l:abbr.. '/'
@@ -92,27 +87,21 @@ function s:file(kw)
 	if len(a:kw) < 1
 		return []
 	endif
-	let l:file = ''
-	for l:f in getbufinfo()
-		let l:f = l:f['name']
-		if fnamemodify(l:f, ':t') ==# 'notmuch-folder'
-					\ && get(swapinfo(l:f), 'error', '') ==# 'Cannot open file'
-					\ && getftime(l:f) == -1
-			let l:file = l:f
-			break
-		endif
-	endfor
-	if l:file ==# ''
-		return []
-	endif
+	let l:file = s:get_wd()
+	" if a:kw =~# '^\.\.\?/' " 先頭 ../, ./ がうまく動作しない
+	" 	let l:cwd = expand(simplify(l:file .. '/' .. a:kw))
+	" elseif a:kw !~# '^\(/\|\~\)'
 	if a:kw !~# '^\(/\|\~\)'
-		let l:cwd = fnamemodify(l:file, ':h') . '/' . a:kw
+		let l:cwd = l:file .. '/' .. a:kw
 	else
 		let l:cwd = a:kw
 	endif
 	let l:glob = fnamemodify(l:cwd, ':t') .. '.\=[^.]*'
 	let l:cwd  = fnamemodify(l:cwd, ':p:h')
 	let l:pre  = fnamemodify(a:kw, ':h')
+	if l:pre !~# '^\(/\|\~\)' " 相対パスだとメール作成時と送信時でカレント・ディレクトリが異なると、別ファイル扱いになるのでフルパスか ~ で始まる形式にする
+		let l:pre = simplify(l:file .. '/' .. l:pre)
+	endif
 	if l:pre !~# '/$'
 		let l:pre = l:pre .. '/'
 	endif
@@ -123,15 +112,39 @@ function s:file(kw)
 endfunction
 
 function s:sort(item1, item2) abort
-	if a:item1.menu ==# '[dir]' && a:item2.menu !=# '[dir]'
+	if a:item1.word <? a:item2.word
 		return -1
-	endif
-	if a:item1.menu !=# '[dir]' && a:item2.menu ==# '[dir]'
+	elseif a:item1.word >? a:item2.word
+		return 1
+	elseif a:item1.menu ==# '[dir]' && a:item2.menu !=# '[dir]'
+		return -1
+	elseif a:item1.menu !=# '[dir]' && a:item2.menu ==# '[dir]'
 		return 1
 	endif
 	return 0
 endfunction
-" }}} https://github.com/prabirshrestha/asyncomplete-file.vim をほぼ写しただけ終わり
+
+function s:get_wd() abort " working directory の取得
+	if exists('g:notmuch_save_dir') " notmuch-py-vim の設定が有れば、その設定フォルダを
+		return g:notmuch_save_dir
+	endif
+	for l:f in getbufinfo() " notmuch-py-vim を使っていれば、notmuch://folder? に従う
+		let l:f = l:f['name']
+		if l:f[:16] ==# 'notmuch://folder?'
+					\ && get(swapinfo(l:f), 'error', '') ==# 'Cannot open file'
+					\ && getftime(l:f) == -1
+			return l:f[17:]
+			break
+		endif
+	endfor
+	" 以下単純に :pwd 相当
+	let l:n = resolve(expand('%:p'))
+	if getftype(l:n) == 'file'
+		return fnamemodify(l:n, ':h')
+	else
+		return l:n
+	endif
+endfunction
 
 let &cpoptions = s:save_cpo
 unlet s:save_cpo
