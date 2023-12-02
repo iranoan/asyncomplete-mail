@@ -34,12 +34,12 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 	elseif l:sync_name ==# 'mailHeaderAttach'
 		let l:kw = matchstr(matchstr(l:typed, '\m\c^Attach:\s*\zs[^ ]\+'), '[^ ]\+$')
 		let l:matches = s:file(l:kw)
+	" 以下は速度的な理由で Python 使用
 	elseif l:sync_name ==# 'mailHeaderFcc'
 		let l:kw = matchstr(matchstr(l:typed, '\m\c^Fcc:\s*\zs[^ ]\+'), '[^ ]\+$')
 		let l:matches = map(py3eval('get_mail_folders()'), '{"word":v:val,"dup":0,"icase":1,"menu": "[Fcc]"}')
 	elseif l:sync_name ==# 'mailHeaderAddress'
 		let l:kw = matchstr(matchstr(l:typed, '\m^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
-		" アドレス補完だけは速度的な理由で Python 使用
 		let l:matches = py3eval('asyncomplete_address(''' .. substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') .. ''')')
 	else
 		return
@@ -88,9 +88,6 @@ function s:file(kw)
 		return []
 	endif
 	let l:file = s:get_wd()
-	" if a:kw =~# '^\.\.\?/' " 先頭 ../, ./ がうまく動作しない
-	" 	let l:cwd = expand(simplify(l:file .. '/' .. a:kw))
-	" elseif a:kw !~# '^\(/\|\~\)'
 	if a:kw !~# '^\(/\|\~\)'
 		let l:cwd = l:file .. '/' .. a:kw
 	else
