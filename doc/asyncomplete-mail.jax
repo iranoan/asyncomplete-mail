@@ -1,4 +1,4 @@
-*asyncomplete-mail.jax* メール・ヘッダーで補完する asyncomplete.vim ソース
+*asyncomplete-mail* メール・ヘッダーで補完する asyncomplete.vim ソース
 
 Author:  Iranoan <iranoan+vim@gmail.com>
 Repository: https://github.com/iranoan/asyncomplete-mail
