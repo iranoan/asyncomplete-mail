@@ -22,7 +22,7 @@ def asyncomplete_address(kw):
             adr = adr.split('\t')
             adr_len = len(adr)
             if adr_len == 2 and adr[1] != 'My Contacts (group)':
-                matches.append({'word': adr[0], 'dup': 0, 'icase': 1, 'abbr': adr[1]})
+                matches.append({'word': adr[0], 'dup': 0, 'icase': 1, 'abbr': adr[1], 'menu': '[goobook]'})
             elif adr_len == 3:
                 name = RE_SPACE.sub(' ', utils.unquote(adr[1]))
                 if ',' in name:
