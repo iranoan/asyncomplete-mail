@@ -47,7 +47,7 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 	endif
 	let l:kwlen = len(l:kw)
 	let l:startcol = l:col - l:kwlen
-	call asyncomplete#complete(a:opt['name'], a:ctx, l:startcol, l:matches)
+	call asyncomplete#complete(a:opt['name'], a:ctx, l:startcol, l:matches, 1)
 endfunction
 
 function s:comp_kw(kw, comp_ls)
