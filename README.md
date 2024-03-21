@@ -14,7 +14,7 @@ vim --version | grep +python3
 
 ### [notmuch-py-vim](https://github.com/iranoan/notmuch-py-vim)
 
-このプラグインの下書き (&|filetype|==notmuch-draft) 上での動作を想定している
+このプラグインの下書き (&filetype==notmuch-draft) 上での動作を想定している
 
 これに準じて次が必要
 
