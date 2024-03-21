@@ -38,7 +38,7 @@ function asyncomplete#sources#mail#completor(opt, ctx) abort
 	" 以下は速度的な理由で Python 使用
 	elseif l:sync_name ==# 'mailHeaderFcc'
 		let l:kw = matchstr(matchstr(l:typed, '\m\c^Fcc:\s*\zs[^ ]\+'), '[^ ]\+$')
-		let l:matches = map(py3eval('get_mail_folders()'), '{"word":v:val,"dup":0,"icase":1,"menu": "[Fcc]"}')
+		let l:matches = map(py3eval('get_mail_folders()'), '#{word:v:val,dup:0,icase:1,kind: "Mail",menu: "[Fcc]"}')
 	elseif l:sync_name ==# 'mailHeaderAddress'
 		let l:kw = matchstr(matchstr(l:typed, '\m^[^:]\+:\s*\zs.\+'), '\(\(\("\(\\"\|[^"]\)*"\|(\(\\(\|\\)\|[^()]\)*)\|[^,]\)\+\),\s*\)*\zs.\+$')
 		let l:matches = py3eval('asyncomplete_address(''' .. substitute(substitute(l:kw, '\\', '\\\\', 'g'), '''', '\\\''', 'g') .. ''')')
@@ -65,9 +65,9 @@ function s:comp_kw(kw, comp_ls)
 		endif
 	endfor
 	if a:comp_ls == []
-		return map(l:matches, '{"word":v:val,"dup":0,"icase":1,"menu": "[Signature]"}')
+		return map(l:matches, '#{word:v:val,dup:0,icase:1,kind: "Mail",menu: "[Signature]"}')
 	else
-		return map(l:matches, '{"word":v:val,"dup":0,"icase":1,"menu": "[Encrypt]"}')
+		return map(l:matches, '#{word:v:val,dup:0,icase:1,kind: "Mail",menu: "[Encrypt]"}')
 	endif
 endfunction
 
@@ -81,7 +81,7 @@ function s:filename_map(prefix, file) abort " https://github.com/prabirshrestha/
 		let l:menu = '[file]'
 		let l:abbr = l:abbr
 	endif
-	return {'menu': l:menu, 'word': l:word, 'abbr': l:abbr, 'icase': 1, 'dup': 0}
+	return #{kind: "Mail",menu: l:menu, word: l:word, abbr: l:abbr, icase: 1, dup: 0}
 endfunction
 
 function s:file(kw)
