@@ -7,6 +7,10 @@ scriptencoding utf-8
 if get(g:, 'loaded_autoload_asyncomplete_sources_mail')
 	finish
 endif
+if !has('python3')
+	finish
+endif
+
 let g:loaded_autoload_asyncomplete_sources_mail = 1
 let s:save_cpo = &cpoptions
 set cpoptions&vim
