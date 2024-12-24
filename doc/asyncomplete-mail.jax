@@ -28,7 +28,7 @@ notmuch-py-vim (https://github.com/iranoan/notmuch-py-vim) の下書きメール
 ==============================================================================
                                                      *asyncomplete-mail-require*
 要件~
- >
+
 Vim~
 >
 	$ vim --version | grep +python3
@@ -65,19 +65,19 @@ Ubuntu 等の Debian 系なら >
 使用しているパッケージ・マネージャに従えば良い
 
 Vundle (https://github.com/gmarik/vundle)~
->
+>vim
 	Plug 'iranoan/asyncomplete-mail'
 
 Vim-Plug (https://github.com/junegunn/vim-plug)~
->
+>vim
 	Plug 'iranoan/asyncomplete-mail'
 
 NeoBundle (https://github.com/Shougo/neobundle.vim)~
->
+>vim
 	NeoBundle 'iranoan/asyncomplete-mail'
 
 dein.nvim (https://github.com/Shougo/dein.vim)~
->
+>vim
 	call dein#add('iranoan/asyncomplete-mail')
 
 Vim packadd~
@@ -86,7 +86,7 @@ Vim packadd~
 
 <	遅延読み込みをさせるなら >
 	$ git clone https://github.com/iranoan/asyncomplete-mail ~/.vim/pack/iranoan/opt/asyncomplete-mail
-<	として asyncomplete.vim の設定箇所に >
+<	として asyncomplete.vim の設定箇所に >vim
 	packadd asyncomplete-mail
 <	を書き加える
 
@@ -95,7 +95,7 @@ Vim packadd~
                                                         *asyncomplete-mail-conf*
 設定~
 ~/.vim/vimrc などの設定ファイル中の asyncomplete.vim 設定箇所に次のような記載を
-加える >
+加える >vim
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options({
 				\ 'allowlist': ['notmuch-draft'],
 				\ }))
